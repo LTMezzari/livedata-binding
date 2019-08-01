@@ -1,4 +1,4 @@
-package mezzari.torres.lucas.livedata_binding.util;
+package mezzari.torres.lucas.livedata_binding.source;
 
 import android.util.Log;
 import android.view.View;
@@ -21,6 +21,20 @@ import mezzari.torres.lucas.livedata_binding.annotation.BindTo;
  * @see mezzari.torres.lucas.livedata_binding.annotation.BindTo
  **/
 public final class LiveDataBinding {
+
+    //Declares a static private binder for further method invocation
+    private static ViewBinder binder;
+
+    /**
+     * Set the binder class for the LiveDataBinding
+     * The method should be called only once
+     *
+     * @param viewBinder The ViewBinder that will be used to bind fields
+     */
+    public static void setViewBinder(ViewBinder viewBinder) {
+        //Set the static binder
+        binder = viewBinder;
+    }
     /**
      * Public method that bind MutableLiveData to annotated View's
      *
@@ -109,8 +123,13 @@ public final class LiveDataBinding {
             View view = (View) field.get(object);
             //Get the MutableLiveData
             MutableLiveData<?> liveData = getMutableLiveData(bindTo.value(), object, objectClass);
-            //Call the BindingUtils method
-            BindingUtils.bindView(owner, liveData, view);
+            //Check if the ViewBinder is not null
+            if (binder == null) {
+                //Throw a exception if the binder is null
+                throw new RuntimeException("A ViewBinder should be set for the binding to work.");
+            }
+            //Call the bindView method
+            binder.bindView(owner, liveData, view);
         } catch (IllegalAccessException e) {
             //Handle exception
             handleException(e);
@@ -201,7 +220,7 @@ public final class LiveDataBinding {
         //Check if it is debug
         if (BuildConfig.DEBUG) {
             //Log the given message
-            Log.d(BindingUtils.class.getSimpleName(), message);
+            Log.d(LiveDataBinding.class.getSimpleName(), message);
         }
     }
 

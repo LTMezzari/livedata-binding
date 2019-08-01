@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import lucas.torres.viewloader.loader.ViewLoader;
 import mezzari.torres.lucas.livedata_binding.R;
 import mezzari.torres.lucas.livedata_binding.annotation.LayoutReference;
-import mezzari.torres.lucas.livedata_binding.util.LiveDataBinding;
+import mezzari.torres.lucas.livedata_binding.source.LiveDataBinding;
 
 /**
  * @author Lucas T. Mezzari
